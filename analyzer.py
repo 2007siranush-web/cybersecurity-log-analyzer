@@ -32,3 +32,35 @@ for ip, count in failed_ips.items():
 print("Targeted users:")
 for user, count in failed_users.items():
  print(user, "-", count, "failed attempts")
+
+
+for log in logs:
+ if "LOGIN_FAILED" in log:
+  time = log.split(" ")[1]
+  print(time)
+
+previous_time = None
+from datetime import datetime
+
+times=[]
+
+for log in logs:
+ if "LOGIN_FAILED" in log:
+  time= log.split(" ")[1]
+  timestamp = log.split(" ")[0] +" " + log.split(" ")[1]
+  timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
+  print(time)
+  print(timestamp)
+  
+  times.append(timestamp)
+  
+  if previous_time:
+   difference = timestamp - previous_time
+   print(difference)
+   if difference.total_seconds() < 10:
+    print("FAST LOGIN:", timestamp)
+  previous_time = timestamp
+
+difference = times[-1] - times[0]
+print(difference)
+
